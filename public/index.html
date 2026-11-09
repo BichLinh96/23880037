@@ -376,6 +376,22 @@
         <div class="text-center">Copyright &copy; 2026 by 23880037 - LU BICH LINH</div>
     </footer>
     <script src="https://flowbite.com/docs/flowbite.min.js"></script>
+
+    <!-- supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/mssv.js"></script>
+    <script>
+        (async function () {
+            const { data, error } = await client
+                .from("categories")
+                .select();
+            
+            if (error){
+                console.error(error);
+            }
+            console.log(data);
+        })()
+    </script>
 </body>
 
 </html>
