@@ -149,15 +149,10 @@
     <section class="max-w-7xl mx-auto p-8">
         <h1 class="font-heading text-7xl mb-8">Gallery</h1>
         <p class="text-neutral-700 text-md font-bold">Filter by category:</p>
-        <ul class="flex flex-wrap text-md font-bold text-center text-body">
-            <li class="me-2"><a href="gallery.html"
-                    class="inline-block py-3 rounded-base hover:bg-neutral-secondary-soft">Show all</a></li>
-            <li class="me-2"><a href="gallery.html"
-                    class="inline-block py-3 px-2 rounded-base hover:bg-neutral-secondary-soft">Category 1</a></li>
-            <li class="me-2"><a href="gallery.html"
-                    class="inline-block py-3 px-2 rounded-base hover:bg-neutral-secondary-soft">Category 2</a></li>
+        <ul id="categories" class="flex flex-wrap text-md font-bold text-center text-body">
+
         </ul>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <div><a href="details.html"><img src="images/gallery/gallery-img1.jpg" alt="" class="rounded-md"></a></div>
             <div><a href="details.html"><img src="images/gallery/gallery-img2.jpg" alt="" class="rounded-md"></a></div>
             <div><a href="details.html"><img src="images/gallery/gallery-img3.jpg" alt="" class="rounded-md"></a></div>
@@ -204,6 +199,72 @@
         <div class="text-center">Copyright &copy; 2026 by 23880037 - LU BICH LINH</div>
     </footer>
     <script src="https://flowbite.com/docs/flowbite.min.js"></script>
+
+    <!-- HandlebarJS -->
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+    <script type="text/x-handlebar-template" id="categories-template">
+        <li id="categoryAll" class="me-2"><a href="gallery.html"
+        class="inline-block py-3 rounded-base hover:bg-neutral-secondary-soft">Show all</a></li>
+        {{#each data}}
+        <li id="category{{id}}" class="me-2"><a href="gallery.html?category={{id}}"
+                class="inline-block py-3 px-2 rounded-base hover:bg-neutral-secondary-soft">{{name}}</a></li>
+        {{/each}}
+    </script>
+    <script type="text/x-handlebar-template" id="gallery-template">
+        {{#each data}}
+            <div><a href="details.html?id={{id}}"><img src="{{thumbpath}}" alt="{{title}}" class="rounded-md"></a></div>
+        {{/each}}
+    </script>
+
+    <!-- supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/23880037.js"></script>
+    <script src="js/api/database.js"></script>
+    <script src="js/toast.js"></script>
+
+    <script>
+        (async function () {
+            const [categories, gallery] = await Promise.all([
+                fetchCategoryByType("gallery"),
+                fetchGallery()
+            ]);
+            const selectedCategory = getSelectedCategoryFromURL();
+            const { selectedGallery, activeGalleryId } = selectGalleryByCategory(gallery, selectedCategory);
+
+            renderView("categories-template", "categories", categories);
+            renderView("gallery-template", "gallery", selectedGallery);
+            highlightCategoryTab(selectedCategory)
+        })();
+
+        function getSelectedCategoryFromURL() {
+            const queryString = window.location.search;
+            const searchParams = new URLSearchParams(queryString);
+            return searchParams.get("category");
+        }
+
+        function selectGalleryByCategory(gallery, categoryId) {
+            if (!categoryId) {
+                return { selectedGallery: gallery, activeGalleryId: "All" };
+            }
+
+            const filtered = gallery.filter(i => i.category_id == categoryId)
+            console.log(filtered)
+            if (filtered.length === 0) {
+                return { selectedGallery: gallery, activeGalleryId: "All" };
+            }
+
+            return { selectedGallery: filtered, activeGalleryId: "categoryId" };
+        }
+
+        function highlightCategoryTab(categoryId){
+            const categoriesRoot = document.querySelector("#categories");
+            if(!categoriesRoot) return;
+
+            categoriesRoot.querySelector(".active")?.classList.remove("active");
+            categoriesRoot.querySelector(`#category${categoryId} a`)?.classList.add("active");
+        }
+    </script>
 </body>
 
 </html>

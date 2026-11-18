@@ -94,7 +94,7 @@
                 </div>
                 <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-search">
                     <div class="relative mt-3 md:hidden">
-                        <div class="absolute inset-y-0 end-2 flex items-center ps-3 pointer-events-none">
+                        <div class="absolute inset-y-0 end-2 flex items-center ps-3 pointer-events-auto">
                             <svg class="w-4 h-4 text-body text-green-500!" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                 viewBox="0 0 24 24">
@@ -219,55 +219,9 @@
     </section>
     <section class="w-full bg-[url('images/bg-banner.gif')] bg-repeat h-2 block sm:hidden"></section>
     <!-- Product with 4 columns -->
-    <section class="max-w-7xl mx-auto py-16 grid grid-cols-2 md:grid-cols-4 gap-8 px-8">
-        <div class="block max-w-sm">
-            <a href="details.html">
-                <img src="images/icon-1.png" alt="Coffee" class="mx-auto">
-            </a>
-            <div class="text-center">
-                <h2 class="mt-3 text-3xl font-semibold tracking-tight text-heading">
-                    <a href="details.html">Coffee</a>
-                </h2>
-                <p class="text-sm py-4">lorem ipsum dolor sit amet consectetur adipiscing elit. Impedit, vitae.</p>
-                <a href="details.html" class="read-more">Read more</a>
-            </div>
-        </div>
-        <div class="block max-w-sm">
-            <a href="details.html">
-                <img src="images/icon-2.png" alt="Coffee" class="mx-auto">
-            </a>
-            <div class="text-center">
-                <h2 class="mt-3 text-3xl font-semibold tracking-tight text-heading">
-                    <a href="details.html">Coffee</a>
-                </h2>
-                <p class="text-sm py-4">lorem ipsum dolor sit amet consectetur adipiscing elit. Impedit, vitae.</p>
-                <a href="details.html" class="read-more">Read more</a>
-            </div>
-        </div>
-        <div class="block max-w-sm">
-            <a href="details.html">
-                <img src="images/icon-3.png" alt="Coffee" class="mx-auto">
-            </a>
-            <div class=" text-center">
-                <h2 class="mt-3 text-3xl font-semibold tracking-tight text-heading">
-                    <a href="details.html">Coffee</a>
-                </h2>
-                <p class="text-sm py-4">lorem ipsum dolor sit amet consectetur adipiscing elit. Impedit, vitae.</p>
-                <a href="details.html" class="read-more">Read more</a>
-            </div>
-        </div>
-        <div class="block max-w-sm">
-            <a href="details.html">
-                <img src="images/icon-4.png" alt="Coffee" class="mx-auto">
-            </a>
-            <div class="text-center">
-                <h2 class="mt-3 text-3xl font-semibold tracking-tight text-heading">
-                    <a href="details.html">Coffee</a>
-                </h2>
-                <p class="text-sm py-4">lorem ipsum dolor sit amet consectetur adipiscing elit. Impedit, vitae.</p>
-                <a href="details.html" class="read-more">Read more</a>
-            </div>
-        </div>
+    <section class="max-w-7xl mx-auto py-16 grid grid-cols-2 md:grid-cols-4 gap-8 px-8" id="products">
+        <img src="images/system/preloader.gif" alt="">
+
     </section>
     <!-- About us -->
     <section class="w-full bg-pink-300 text-neutral-800 py-16 px-8">
@@ -282,12 +236,12 @@
             </div>
             <div class="border-3 border-dashed rounded-xl border-neutral-800 p-4">
                 <h1 class="text-3xl text-white font-heading text-center mb-4">Newwsletter<br>Sign up </h1>
-                <form action="">
+                <form action="#" onsubmit="signup(event)">
                     <label for="email">Please, write an e-mail</label>
                     <input type="email" id="email"
                         class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                         placeholder="John.doe@company.com" required />
-                    <button type="button"
+                    <button type="submit"
                         class="text-white bg-dark box-border border border-transparent hover:bg-dark-strong focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base px-4 py-2.5 mt-2 float-end focus:outline-none font-heading text-2xl">SUBSCRIBE</button>
                 </form>
             </div>
@@ -296,46 +250,8 @@
     <!-- News with 3 columns -->
     <section class="max-w-7xl mx-auto py-16 px-8">
         <h1 class="font-heading text-7xl mb-8">News</h1>
-        <div class="flex flex-col md:grid md:grid-cols-3 gap-8">
-            <div class="grid grid-cols-[2.5fr_7.5fr] gap-4">
-                <div>
-                    <div class="bg-lime-400 text-white font-heading rounded-2xl text-center text-3xl p-4">Mar<br>15
-                    </div>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-heading hover:highlight">
-                        <a href="details.html">News Title</a>
-                    </h2>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, cupiditate.</p>
-                    <a href="details.html" class="read-more">Read more</a>
-                </div>
-            </div>
-            <div class="grid grid-cols-[2.5fr_7.5fr] gap-4">
-                <div>
-                    <div class="bg-lime-400 text-white font-heading rounded-2xl text-center text-3xl p-4">Mar<br>15
-                    </div>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-heading hover:highlight">
-                        <a href="details.html">News Title</a>
-                    </h2>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, cupiditate.</p>
-                    <a href="details.html" class="read-more">Read more</a>
-                </div>
-            </div>
-            <div class="grid grid-cols-[2.5fr_7.5fr] gap-4">
-                <div>
-                    <div class="bg-lime-400 text-white font-heading rounded-2xl text-center text-3xl p-4">Mar<br>15
-                    </div>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-heading hover:highlight">
-                        <a href="details.html">News Title</a>
-                    </h2>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, cupiditate.</p>
-                    <a href="details.html" class="read-more">Read more</a>
-                </div>
-            </div>
+        <div class="flex flex-col md:grid md:grid-cols-3 gap-8" id="news">
+            <img src="images/system/preloader.gif" alt="">
         </div>
     </section>
     <!-- Footer -->
@@ -377,20 +293,131 @@
     </footer>
     <script src="https://flowbite.com/docs/flowbite.min.js"></script>
 
+    <!-- Toast -->
+    <div id="toast-container" class="fixed inset-0 z-50 flex justify-center items-center pointer-events-none p-4">
+        <div id="toast-success"
+            class="hidden flex items-center w-full max-w-sm p-4 text-body bg-neutral-primary-soft rounded-base shadow-xs border border-default pointer-events-auto"
+            role="alert">
+            <div
+                class="inline-flex items-center justify-center shrink-0 w-7 h-7 text-fg-success bg-success-soft rounded">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 11.917 9.724 16.5 19 7.5" />
+                </svg>
+                <span class="sr-only">Check icon</span>
+            </div>
+            <div class="ms-3 text-sm font-normal toast-message">Your email has been saved successfully!</div>
+            <button type="button"
+                class="ms-auto flex items-center justify-center text-body hover:text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded text-sm h-8 w-8 focus:outline-none pointer-events-auto"
+                 aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18 17.94 6M18 18 6.06 6" />
+                </svg>
+            </button>
+        </div>
+        <div id="toast-warning"
+            class="hidden flex items-center w-full max-w-sm p-4 text-body bg-neutral-primary-soft rounded-base shadow-xs border border-default pointer-events-auto"
+            role="alert">
+            <div
+                class="inline-flex items-center justify-center shrink-0 w-7 h-7 text-fg-warning bg-warning-soft rounded">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span class="sr-only">Warning icon</span>
+            </div>
+            <div class="ms-3 text-sm font-normal toast-message"></div>
+            <button type="button"
+                class="ms-auto flex items-center justify-center text-body hover:text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded text-sm h-8 w-8 focus:outline-none"
+                 aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18 17.94 6M18 18 6.06 6" />
+                </svg>
+            </button>
+        </div>
+
+    </div>
+    <!-- HandlebarJS -->
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+    <script type="text/x-handlebar-template" id="product-template">
+            {{#each data}}
+            <div class="block max-w-sm" >
+                <a href="details.html?id={{id}}">
+                    <img src="{{thumbpath}}" alt="{{title}}" class="mx-auto">
+                </a>
+                <div class="text-center">
+                    <h2 class="mt-3 text-3xl font-semibold tracking-tight text-heading">
+                        <a href="details.html?id={{id}}">{{title}}</a>
+                    </h2>
+                    <p class="text-sm py-4">{{summary}}</p>
+                    <a href="details.html?id={{id}}" class="read-more">Read more</a>
+                </div>
+            </div>
+            {{/each}}
+    </script>
+
+    <script type="text/x-handlebar-template" id="news-template">
+        {{#each data}}
+            <div class="grid grid-cols-[2.5fr_7.5fr] gap-4">
+                <div>
+                    <div class="bg-lime-400 text-white font-heading rounded-2xl text-center text-3xl p-4">{{month}}<br>{{day}}
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-heading hover:highlight">
+                        <a href="details.html?id={{id}}">{{title}}</a>
+                    </h2>
+                    <p>{{summary}}</p>
+                    <a href="details.html?id={{id}}" class="read-more">Read more</a>
+                </div>
+            </div>
+        {{/each}}
+    </script>
+
     <!-- supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/mssv.js"></script>
+    <script src="js/23880037.js"></script>
+    <script src="js/api/database.js"></script>
+    <script src="js/toast.js"></script>
     <script>
         (async function () {
-            const { data, error } = await client
-                .from("categories")
-                .select();
-            
-            if (error){
-                console.error(error);
+            let products = await fetchDataByTypes();
+            renderView("product-template", "products", products);
+
+            let news = await fetchDataByTypes();
+            let newsWithDate = news.map((n) => {
+                const date = new Date(n.created_at);
+                return {
+                    ...n,
+                    day: date.getDate(),
+                    month: date.toLocaleString("default", { month: "short" })
+                }
+            })
+            renderView("news-template", "news", newsWithDate)
+        })();
+        async function signup(e) {
+            e.preventDefault();
+            try {
+                const form = e.target;
+                const email = form.querySelector("#email").value;
+                await subscribe(email);
+                showToast("success", "Your email has been saved successfully!");
             }
-            console.log(data);
-        })()
+            catch (error) {
+                showToast("warning", error.message);
+
+            }
+        }
+
     </script>
 </body>
 

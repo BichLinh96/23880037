@@ -145,15 +145,8 @@
     <section class="w-full bg-[url('images/bg-banner.gif')] bg-repeat h-2"></section>
 
     <!-- Details -->
-    <section class="max-w-7xl mx-auto p-8 overflow-auto">
-        <h1 class="font-heading text-7xl mb-8">Title
-        </h1>
-        <div>
-            <img src="images/blog/blog-img1.jpg" alt="" class="float-start me-8 mb-8 rounded-xl">
-            <div class="text-justify">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat soluta aperiam modi ullam qui cupiditate nisi amet ex sequi assumenda? Perferendis sit dolorum asperiores accusamus deserunt exercitationem ipsam quos minima!</p>
-            </div>
-        </div>
+    <section class="max-w-7xl mx-auto p-8 overflow-auto" id="details">
+        <img src="images/system/preloader.gif" alt="">
     </section>
 
 
@@ -192,8 +185,43 @@
         </nav>
         <div class="text-center">Copyright &copy; 2026 by 23880037 - LU BICH LINH</div>
     </footer>
+
+    <!-- flowbite -->
     <script src="https://flowbite.com/docs/flowbite.min.js"></script>
+
+    <!-- HandlebarJS -->
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+    <script type="text/x-handlebar-template" id="details-template">
+        {{#with data}}
+            <h1 class="font-heading text-7xl mb-8">{{title}}
+            </h1>
+            <div>
+                <img src="{{imagepath}}" alt="" class="float-start me-8 mb-8 rounded-xl">
+                <div class="text-justify">
+                    <p>{{{description}}}</p>
+                </div>
+            </div>
+        {{/with}}
+
+    </script>
+
+    <!-- supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/23880037.js"></script>
+    <script src="js/api/database.js"></script>
+    <script>
+        (async function () {
+            let queryString = window.location.search;
+            let urlParams = new URLSearchParams(queryString);
+            let id = urlParams.get("id");
+
+            let data = await fetchDataById(id)
+            renderView("details-template", "details", data)
+            console.log(data)
+
+        })()
+    </script>
 </body>
 
 </html>
-<!-- 52p -->
