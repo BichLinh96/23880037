@@ -82,9 +82,12 @@ async function subscribe(email) {
 }
 
 async function fetchBlogByCategoryId(categoryId = "All", page = 1, pageSize = 2) {
-    const safeCategoryId = Math.max(1, Number(categoryId));
-    const safePage = Math.max(1, Number(page));
+    const safeCategoryId = Number(categoryId);
+    const safePage = Math.max(1, Number(page) || 1);
     const safePageSize = Math.max(1, Number(pageSize) || 2);
+
+    const from = (safePage - 1) * safePageSize;
+    const to = from + safePageSize - 1;
 
     let query = client
         .from("information")
@@ -94,20 +97,48 @@ async function fetchBlogByCategoryId(categoryId = "All", page = 1, pageSize = 2)
             author:users!information_author_id_fkey(id, name),
             category:categories!information_category_id_fkey!inner(id, name, type),
             comments:comments!comments_blogId_fkey(id)
-            `
+            `,
+            { count: "exact" }
         )
         .eq("category.type", "blogs")
         .order("created_at", { ascending: false })
-        .range((safePage - 1) * safePageSize, safePage * safePageSize - 1);
+        .range((safePage - 1) * safePageSize, safePage * safePageSize - 1)
 
     if (!Number.isNaN(safeCategoryId) && safeCategoryId > 0) {
         query = query.eq("category_id", safeCategoryId);
     }
 
-    const { data, error } = await query;
+    const { data, error, count } = await query.range(from, to);
+    const totalItem = count ?? 0;
+    const pageCount = Math.ceil(totalItem / safePageSize);
+    const prevPage = Math.max(1, safePage - 1)
+    const nextPage = Math.min(pageCount, safePage + 1)
+
     if (error) {
         console.error(error);
-        return [];
+        return {
+            data,
+            pagination: {
+                currentPage: safePage,
+                pageCount: 0,
+                categoryId,
+                size: 2,
+                prevPage: 1,
+                nextPage: 1
+            },
+            error
+        }
     }
-    return data;
+    return {
+        data,
+        pagination: {
+            currentPage: safePage,
+            pageCount,
+            categoryId,
+            size: safePageSize,
+            prevPage,
+            nextPage
+        },
+        error
+    }
 }

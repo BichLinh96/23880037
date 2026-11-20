@@ -209,38 +209,45 @@
     <!-- HandlebarJS -->
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 
+    <!-- Pagination helper -->
+    <script src="js/handlebars-pagination-helper.js"></script>
+
+    <!-- Template -->
     <script type="text/x-handlebar-template" id="categories-template">
         <li class="flex items-center">
             <img src="images/marker1.png" alt="" class="me-2">
-            <a href="blogs.html">Show all</a>
+            <a href="blogs.html?category=All" id="categoryAll">Show all</a>
         </li>
         {{#each data}}
         <li class="flex items-center">
-            <img src="{{thumbpath}}" alt="" class="me-2">
-            <a href="blogs.html?category={{id}}">{{name}}</a>
+            <img src="images/marker1.png" alt="" class="me-2">
+            <a href="blogs.html?category={{id}}" id="category{{id}}">{{name}}</a>
         </li>
         {{/each}}
     </script>
     <script type="text/x-handlebar-template" id="blogs-template">
-        {{#each data}}
+        {{#each data.data}}
         <div class="py-4 clear-both">
             <h2 class="font-heading text-3xl">
                 <a href="blog-details.html?id={{id}}">{{title}}</a>
             </h2>
-            <p class="py-4">by {{author.name}} in <a href="blogs.html">{{category.name}}</a> on {{created_at}} <a
+            <p class="py-4">by {{#if author}}{{author.name}}{{else}}Anonymous{{/if}} in <a href="blogs.html">{{category.name}}</a> on {{created_at}} <a
                     href="blog-details.html#comments">Comments ({{comments.length}})</a></p>
-            <a href="blog-details.html">
+            <a href="blog-details.html?id={{id}}">
                 <img src="{{thumbpath}}" alt="{{title}}"
                     class="float-start mb-8 me-8 rounded-xl">
             </a>
             <p class="text-justify">{{summary}}</p>
-            <a href="blog-details.html" class="read-more">Read more...</a>
+            <a href="blog-details.html?id={{id}}" class="read-more">Read more...</a>
         </div>
         {{/each}}
+        {{#with data.pagination}}
         <nav aria-label="Page navigation example" class="clear-both flex justify-center mt-8">
+            {{#pagination currentPage pageCount size}}
             <ul class="flex -space-x-px text-sm">
+                {{#unless startFromFirstPage}}
                 <li>
-                    <a href="#"
+                    <a href="blogs.html?page={{../prevPage}}&category={{../category}}"
                         class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium rounded-s-base text-sm w-9 h-9 focus:outline-none">
                         <span class="sr-only">Previous</span>
                         <svg class="w-4 h-4 rtl:rotate-180" aria-hidden="true"
@@ -251,28 +258,25 @@
                         </svg>
                     </a>
                 </li>
+                {{/unless}}
+
+                {{#each pages}}                
+                {{#if isCurrent}}
                 <li>
                     <a href="#"
-                        class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">1</a>
+                        class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none active">{{page}}</a>
                 </li>
+                {{/if}}
+                {{#unless isCurrent}}
+                    <a href="blogs.html?page={{page}}&category={{../../category}}"
+                        class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">{{page}}</a>
+
+                {{/unless}}
+                {{/each}}
+
+                {{#unless endAtLastPage}}
                 <li>
-                    <a href="#"
-                        class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">2</a>
-                </li>
-                <li>
-                    <a href="#" aria-current="page"
-                        class="flex items-center justify-center text-fg-brand bg-neutral-tertiary-medium box-border border border-default-medium hover:text-fg-brand font-medium text-sm w-9 h-9 focus:outline-none">3</a>
-                </li>
-                <li>
-                    <a href="#"
-                        class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">4</a>
-                </li>
-                <li>
-                    <a href="#"
-                        class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">5</a>
-                </li>
-                <li>
-                    <a href="#"
+                    <a href="blogs.html?page={{../nextPage}}&category={{../category}}"
                         class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium rounded-e-base text-sm w-9 h-9 focus:outline-none">
                         <span class="sr-only">Next</span>
                         <svg class="w-4 h-4 rtl:rotate-180" aria-hidden="true"
@@ -283,30 +287,42 @@
                         </svg>
                     </a>
                 </li>
+                {{/unless}}
             </ul>
+            {{/pagination}}
         </nav>
-
+        {{/with}}
     </script>
 
     <!-- supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/23880037.js"></script>
     <script src="js/api/database.js"></script>
-    <script src="js/toast.js"></script>
 
     <script>
         (async function () {
+
+            const params = new URLSearchParams(window.location.search);
+            const category = params.get("category")
+            const page = params.get("page") ?? 1;
+
             const [categories, blogs] = await Promise.all([
                 fetchCategoryByType("blogs"),
-                fetchBlogByCategoryId()
+                fetchBlogByCategoryId(category, page, 2)
             ]);
-            // const selectedCategory = getSelectedCategoryFromURL();
-            // const { selectedGallery, activeGalleryId } = selectGalleryByCategory(gallery, selectedCategory);
 
             renderView("categories-template", "categories", categories);
             renderView("blogs-template", "blogs", blogs);
-            // highlightCategoryTab(selectedCategory)
+            highlightCategoryTab(category);
         })()
+        function highlightCategoryTab(category) {
+            const root = document.querySelector("#categories");
+            if (!root) return;
+
+            root.querySelector(".active")?.classList.remove("active");
+            root.querySelector(`#category${category}`)?.classList.add("active");
+        }
+
     </script>
 </body>
 
