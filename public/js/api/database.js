@@ -240,15 +240,19 @@ async function supabaseSignup(email, password, name) {
     return data;
 }
 
-client.auth.onAuthStateChange(event, session) => {
+client.auth.onAuthStateChange((event, session) => {
     initAuthUI(session);
-}
+})
 
-function initAuthUI(session){
+function initAuthUI(session) {
     const isLogin = Boolean(session?.user);
-    document.querySelectorAll("isLogout").forEach(item => item.classList.toggle("hidden", isLogin));
-    document.querySelectorAll("isLogin").forEach(item => item.classList.toggle("hidden", !isLogin));
+    document.querySelectorAll(".isLogout").forEach(item => item.classList.toggle("hidden", isLogin));
+    document.querySelectorAll(".isLogin").forEach(item => item.classList.toggle("hidden", !isLogin));
 
 }
 
-
+async function supabaseLogout() {
+    const {error} = await client.auth.signOut();
+    if (error) throw error;
+    
+}

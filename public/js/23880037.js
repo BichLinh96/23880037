@@ -9,3 +9,21 @@ function renderView(templateId, viewId, data) {
     let template = Handlebars.compile(source);
     document.querySelector(`#${viewId}`).innerHTML = template({ data });
 }
+
+function handleLogoutButton(){
+    document.querySelectorAll(".logout-btn").forEach((btn) => {
+        btn.onclick = async() => {
+            try{
+            await supabaseLogout();
+
+            }
+            catch (error){
+                alert(`Logout error: ${error.message}`)
+            }
+        };
+    });
+}
+
+(async function initPage() {
+    handleLogoutButton();
+})();
