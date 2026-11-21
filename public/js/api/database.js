@@ -224,3 +224,31 @@ async function fetchDataByKeyword(keyword) {
     return data;
 
 }
+async function supabaseSignup(email, password, name) {
+    let { data, error } = await client.auth.signUp({ email, password });
+    if (error) throw error;
+
+    ({ error } = await client
+        .from("users")
+        .insert({
+            id: data.user.id,
+            email,
+            name
+        })
+    )
+    if (error) throw error;
+    return data;
+}
+
+client.auth.onAuthStateChange(event, session) => {
+    initAuthUI(session);
+}
+
+function initAuthUI(session){
+    const isLogin = Boolean(session?.user);
+    document.querySelectorAll("isLogout").forEach(item => item.classList.toggle("hidden", isLogin));
+    document.querySelectorAll("isLogin").forEach(item => item.classList.toggle("hidden", !isLogin));
+
+}
+
+

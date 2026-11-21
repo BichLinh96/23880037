@@ -135,11 +135,16 @@
                         </li>
                         <li>
                             <a href="register.html"
-                                class="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-cyan-600! md:p-0 md:dark:hover:bg-transparent">Register</a>
+                                class="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-cyan-600! md:p-0 md:dark:hover:bg-transparent isLogout">Register</a>
+                            <a href="#"
+                                class="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-cyan-600! md:p-0 md:dark:hover:bg-transparent isLogin">Profile</a>
+
                         </li>
                         <li>
                             <a href="login.html"
-                                class="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-cyan-600! md:p-0 md:dark:hover:bg-transparent">Login</a>
+                                class="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-cyan-600! md:p-0 md:dark:hover:bg-transparent isLogout">Login</a>
+                            <a href="#"
+                                class="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-cyan-600! md:p-0 md:dark:hover:bg-transparent isLogin">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -226,7 +231,7 @@
         {{#each data.categories}}
         <li class="flex items-center" id="category{{id}}">
             <img src="images/marker1.png" alt="" class="me-2">
-            <a href="blogs.html?category={{id}}&keyword={{../keyword}}">{{name}}</a>
+            <a href="blogs.html?category={{id}}&keyword={{../data.keyword}}">{{name}}</a>
         </li>
         {{/each}}
     </script>
@@ -308,7 +313,7 @@
         (async function () {
 
             const params = new URLSearchParams(window.location.search);
-            const category = params.get("category")
+            const category = params.get("category") ?? "All"
             const page = params.get("page") ?? 1;
             const keyword = params.get("keyword") ?? "";
 
