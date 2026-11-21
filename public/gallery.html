@@ -77,9 +77,11 @@
                                     d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        <input type="text" id="input-group-1"
-                            class="block w-full ps-4 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-full focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
-                            placeholder="Search">
+                        <form action="search.html">
+                            <input type="text" id="input-group-1"
+                                class="block w-full ps-4 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-full focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
+                                placeholder="Search" name="keyword">
+                        </form>
                     </div>
                     <button data-collapse-toggle="navbar-search" type="button"
                         class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
@@ -102,9 +104,11 @@
                                     d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        <input type="text" id="input-group-2"
-                            class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
-                            placeholder="Search">
+                        <form action="search.html">
+                            <input type="text" id="input-group-2"
+                                class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
+                                placeholder="Search" name="keyword">
+                        </form>
                     </div>
                     <ul
                         class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary ">
@@ -150,14 +154,10 @@
         <h1 class="font-heading text-7xl mb-8">Gallery</h1>
         <p class="text-neutral-700 text-md font-bold">Filter by category:</p>
         <ul id="categories" class="flex flex-wrap text-md font-bold text-center text-body">
-
+            <img src="images/system/preloader.gif" alt="">
         </ul>
         <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div><a href="details.html"><img src="images/gallery/gallery-img1.jpg" alt="" class="rounded-md"></a></div>
-            <div><a href="details.html"><img src="images/gallery/gallery-img2.jpg" alt="" class="rounded-md"></a></div>
-            <div><a href="details.html"><img src="images/gallery/gallery-img3.jpg" alt="" class="rounded-md"></a></div>
-            <div><a href="details.html"><img src="images/gallery/gallery-img4.jpg" alt="" class="rounded-md"></a></div>
-            <div><a href="details.html"><img src="images/gallery/gallery-img5.jpg" alt="" class="rounded-md"></a></div>
+            <img src="images/system/preloader.gif" alt="">
         </div>
     </section>
 
@@ -256,9 +256,9 @@
             return { selectedGallery: filtered, activeGalleryId: "categoryId" };
         }
 
-        function highlightCategoryTab(categoryId){
+        function highlightCategoryTab(categoryId) {
             const categoriesRoot = document.querySelector("#categories");
-            if(!categoriesRoot) return;
+            if (!categoriesRoot) return;
 
             categoriesRoot.querySelector(".active")?.classList.remove("active");
             categoriesRoot.querySelector(`#category${categoryId} a`)?.classList.add("active");

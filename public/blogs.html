@@ -77,9 +77,11 @@
                                     d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        <input type="text" id="input-group-1"
-                            class="block w-full ps-4 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-full focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
-                            placeholder="Search">
+                        <form action="blogs.html">
+                            <input type="text" id="input-group-1"
+                                class="block w-full ps-4 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-full focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
+                                placeholder="Search" name="keyword">
+                        </form>
                     </div>
                     <button data-collapse-toggle="navbar-search" type="button"
                         class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
@@ -102,9 +104,11 @@
                                     d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        <input type="text" id="input-group-2"
-                            class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
-                            placeholder="Search">
+                        <form action="blogs.html">
+                            <input type="text" id="input-group-2"
+                                class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
+                                placeholder="Search" name="keyword">
+                        </form>
                     </div>
                     <ul
                         class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary ">
@@ -151,14 +155,14 @@
             <div class="order-2 md:order-1">
                 <h1 class="text-7xl font-heading">Blogs</h1>
                 <div id="blogs">
-
+                    <img src="images/system/preloader.gif" alt="">
                 </div>
             </div>
             <div class="order-1 md:order-2">
                 <h1 class="text-7xl font-heading mb-4">Categories</h1>
                 <div>
                     <ul id="categories" class="max-w-md space-y-2 text-body list-inside">
-
+                        <img src="images/system/preloader.gif" alt="">
                     </ul>
                 </div>
             </div>
@@ -211,6 +215,7 @@
 
     <!-- Pagination helper -->
     <script src="js/handlebars-pagination-helper.js"></script>
+    <script src="js/helpers/handlebars-formatDate-helper.js"></script>
 
     <!-- Template -->
     <script type="text/x-handlebar-template" id="categories-template">
@@ -218,10 +223,10 @@
             <img src="images/marker1.png" alt="" class="me-2">
             <a href="blogs.html?category=All" id="categoryAll">Show all</a>
         </li>
-        {{#each data}}
-        <li class="flex items-center">
+        {{#each data.categories}}
+        <li class="flex items-center" id="category{{id}}">
             <img src="images/marker1.png" alt="" class="me-2">
-            <a href="blogs.html?category={{id}}" id="category{{id}}">{{name}}</a>
+            <a href="blogs.html?category={{id}}&keyword={{../keyword}}">{{name}}</a>
         </li>
         {{/each}}
     </script>
@@ -231,7 +236,7 @@
             <h2 class="font-heading text-3xl">
                 <a href="blog-details.html?id={{id}}">{{title}}</a>
             </h2>
-            <p class="py-4">by {{#if author}}{{author.name}}{{else}}Anonymous{{/if}} in <a href="blogs.html">{{category.name}}</a> on {{created_at}} <a
+            <p class="py-4">by {{#if author}}{{author.name}}{{else}}Anonymous{{/if}} in <a href="blogs.html?category={{category_id}}">{{category.name}}</a> on {{formatDate created_at}} <a
                     href="blog-details.html#comments">Comments ({{comments.length}})</a></p>
             <a href="blog-details.html?id={{id}}">
                 <img src="{{thumbpath}}" alt="{{title}}"
@@ -247,7 +252,7 @@
             <ul class="flex -space-x-px text-sm">
                 {{#unless startFromFirstPage}}
                 <li>
-                    <a href="blogs.html?page={{../prevPage}}&category={{../category}}"
+                    <a href="blogs.html?page={{../prevPage}}&category={{../category}}&keyword={{../keyword}}"
                         class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium rounded-s-base text-sm w-9 h-9 focus:outline-none">
                         <span class="sr-only">Previous</span>
                         <svg class="w-4 h-4 rtl:rotate-180" aria-hidden="true"
@@ -268,7 +273,7 @@
                 </li>
                 {{/if}}
                 {{#unless isCurrent}}
-                    <a href="blogs.html?page={{page}}&category={{../../category}}"
+                    <a href="blogs.html?page={{page}}&category={{../../category}}&keyword={{../../keyword}}"
                         class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">{{page}}</a>
 
                 {{/unless}}
@@ -276,7 +281,7 @@
 
                 {{#unless endAtLastPage}}
                 <li>
-                    <a href="blogs.html?page={{../nextPage}}&category={{../category}}"
+                    <a href="blogs.html?page={{../nextPage}}&category={{../category}}&keyword={{../keyword}}"
                         class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium rounded-e-base text-sm w-9 h-9 focus:outline-none">
                         <span class="sr-only">Next</span>
                         <svg class="w-4 h-4 rtl:rotate-180" aria-hidden="true"
@@ -305,13 +310,15 @@
             const params = new URLSearchParams(window.location.search);
             const category = params.get("category")
             const page = params.get("page") ?? 1;
+            const keyword = params.get("keyword") ?? "";
+
 
             const [categories, blogs] = await Promise.all([
                 fetchCategoryByType("blogs"),
-                fetchBlogByCategoryId(category, page, 2)
+                fetchBlogByCategoryId(keyword, category, page, 2)
             ]);
 
-            renderView("categories-template", "categories", categories);
+            renderView("categories-template", "categories", { categories, keyword });
             renderView("blogs-template", "blogs", blogs);
             highlightCategoryTab(category);
         })()

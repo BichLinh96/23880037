@@ -81,7 +81,7 @@ async function subscribe(email) {
     if (error) throw error;
 }
 
-async function fetchBlogByCategoryId(categoryId = "All", page = 1, pageSize = 2) {
+async function fetchBlogByCategoryId(keyword = "", categoryId = "All", page = 1, pageSize = 2) {
     const safeCategoryId = Number(categoryId);
     const safePage = Math.max(1, Number(page) || 1);
     const safePageSize = Math.max(1, Number(pageSize) || 2);
@@ -107,6 +107,13 @@ async function fetchBlogByCategoryId(categoryId = "All", page = 1, pageSize = 2)
     if (!Number.isNaN(safeCategoryId) && safeCategoryId > 0) {
         query = query.eq("category_id", safeCategoryId);
     }
+    const textSearch = (keyword || "").trim();
+
+    if (textSearch) {
+        query = query.or(
+            `title.ilike.%${textSearch}%,summary.ilike.%${textSearch}%,description.ilike.%${textSearch}%`
+        )
+    }
 
     const { data, error, count } = await query.range(from, to);
     const totalItem = count ?? 0;
@@ -121,10 +128,11 @@ async function fetchBlogByCategoryId(categoryId = "All", page = 1, pageSize = 2)
             pagination: {
                 currentPage: safePage,
                 pageCount: 0,
-                categoryId,
+                category: categoryId,
                 size: 2,
                 prevPage: 1,
-                nextPage: 1
+                nextPage: 1,
+                keyword
             },
             error
         }
@@ -134,11 +142,85 @@ async function fetchBlogByCategoryId(categoryId = "All", page = 1, pageSize = 2)
         pagination: {
             currentPage: safePage,
             pageCount,
-            categoryId,
+            category: categoryId,
             size: safePageSize,
             prevPage,
-            nextPage
+            nextPage,
+            keyword
         },
         error
     }
+}
+
+async function fetchBlogById(id) {
+
+    const { data, error } = await client
+        .from("information")
+        .select(
+            `
+            id, 
+            title, 
+            category_id, 
+            author_id, 
+            thumbpath, 
+            description, 
+            created_at,
+            author:users!information_author_id_fkey(id, name),
+            category:categories!information_category_id_fkey!inner(id, name),
+            comments:comments!comments_blogId_fkey(
+                id,
+                message,
+                created_at,
+                author:users!comments_authorId_fkey(id, name)
+            )
+            `,
+        )
+        .eq("id", id)
+        .order("created_at", { ascending: false, foreignTable: "comments" })
+        .single()
+
+    if (error) {
+        console.log("Error fetching blog details", error);
+        return null;
+    }
+    return data
+}
+
+async function sendMessage(name, email, subject, message) {
+    const { error } = await client
+        .from("contacts")
+        .insert({ email, name, subject, message });
+
+    if (error) throw error;
+}
+
+async function fetchDataByKeyword(keyword) {
+    const textSearch = (keyword || "").trim();
+    const excluded = [31, 32, 33, 34];
+
+    let query = client
+        .from("information")
+        .select(
+            `
+            id,
+            title,
+            summary,
+            thumbpath
+            `
+        )
+        .not("category_id", "in", `(${excluded.join(", ")})`);
+    if (textSearch) {
+        query = query.or(
+            `title.ilike.%${textSearch}%,summary.ilike.%${textSearch}%,description.ilike.%${textSearch}%`
+        )
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error("Error searching data", error);
+        return [];
+    }
+    return data;
+
 }

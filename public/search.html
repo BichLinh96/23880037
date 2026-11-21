@@ -77,9 +77,11 @@
                                     d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        <input type="text" id="input-group-1"
-                            class="block w-full ps-4 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-full focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
-                            placeholder="Search">
+                        <form action="search.html">
+                            <input type="text" id="input-group-1"
+                                class="block w-full ps-4 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-full focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
+                                placeholder="Search" name="keyword">
+                        </form>
                     </div>
                     <button data-collapse-toggle="navbar-search" type="button"
                         class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
@@ -102,9 +104,11 @@
                                     d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        <input type="text" id="input-group-2"
-                            class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
-                            placeholder="Search">
+                        <form action="search.html">
+                            <input type="text" id="input-group-2"
+                                class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-2.5 py-2 shadow-xs placeholder:text-body"
+                                placeholder="Search" name="keyword">
+                        </form>
                     </div>
                     <ul
                         class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary ">
@@ -145,31 +149,8 @@
     <section class="w-full bg-[url('images/bg-banner.gif')] bg-repeat h-2"></section>
 
     <!-- Search result -->
-    <section class="max-w-3xl mx-auto p-8 overflow-auto">
-        <div class="clear-start mt-4">
-            <h2 class="text-3xl font-heading mb-4 mt-8">
-                <a href="details.html">Title</a>
-            </h2>
-            <div class="float-start me-4 mb-4">
-                <a href="details.html"><img src="images/icon-1.png" alt="" class="rounded-2xl w-full"></a>
-            </div>
-            <div class="p-4 text-justify">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maxime molestiae
-                consequuntur nihil a quisquam laboriosam expedita, ipsum illum, doloremque praesentium, labore
-                nesciunt id non! Eveniet sed quae distinctio impedit ipsum.</div>
-
-        </div>
-        <div class="clear-start mt-4">
-            <h2 class="text-3xl font-heading mb-4 mt-8">
-                <a href="details.html">Title</a>
-            </h2>
-            <div class="float-start me-4 mb-4">
-                <a href="details.html"><img src="images/icon-2.png" alt="" class="rounded-2xl w-full"></a>
-            </div>
-            <div class="p-4 text-justify">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maxime molestiae
-                consequuntur nihil a quisquam laboriosam expedita, ipsum illum, doloremque praesentium, labore
-                nesciunt id non! Eveniet sed quae distinctio impedit ipsum.</div>
-
-        </div>
+    <section class="max-w-3xl mx-auto p-8 overflow-auto" id="results">
+        <img src="images/system/preloader.gif" alt="">
     </section>
 
 
@@ -209,6 +190,42 @@
         <div class="text-center">Copyright &copy; 2026 by 23880037 - LU BICH LINH</div>
     </footer>
     <script src="https://flowbite.com/docs/flowbite.min.js"></script>
+
+    <!-- HandlebarJS -->
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+    <!-- supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/23880037.js"></script>
+    <script src="js/api/database.js"></script>
+
+    <!-- template -->
+    <script id="results-template" type="text/x-handlebars-template">
+        {{#each data}}
+        <div class="clear-start mt-4">
+            <h2 class="text-3xl font-heading mb-4 mt-8">
+                <a href="details.html?id={{id}}">{{title}}</a>
+            </h2>
+            
+            {{#if thumbpath}}
+            <div class="float-start me-4 mb-4">
+                <a href="details.html?id={{id}}"><img src="{{thumbpath}}" alt="{{title}}" class="rounded-2xl w-full"></a>
+            </div>
+            {{/if}}
+            <div class="p-4 text-justify">{{summary}}</div>
+        </div>
+        {{/each }}
+    </script>
+
+    <script>
+        (async function () {
+            const params = new URLSearchParams(window.location.search);
+            const keyword = params.get("keyword");
+
+            const data = await fetchDataByKeyword(keyword);
+            renderView("results-template", "results", data)
+        })()
+    </script>
 </body>
 
 </html>
