@@ -10,18 +10,37 @@ function renderView(templateId, viewId, data) {
     document.querySelector(`#${viewId}`).innerHTML = template({ data });
 }
 
-function handleLogoutButton(){
+function handleLogoutButton() {
     document.querySelectorAll(".logout-btn").forEach((btn) => {
-        btn.onclick = async() => {
-            try{
-            await supabaseLogout();
+        btn.onclick = async () => {
+            try {
+                await supabaseLogout();
 
             }
-            catch (error){
+            catch (error) {
                 alert(`Logout error: ${error.message}`)
             }
         };
     });
+}
+
+async function handleUpdateProfile(e) {
+    e.preventDefault();
+
+    const name = document.querySelector("#crud-modal #name").value;
+    const id = document.querySelector("#crud-modal #id").value;
+    const message = document.querySelector("#crud-modal #message");
+
+    try {
+        await updateUserProfile(id, name);
+        message.innerText = "";
+        document.querySelector("#crud-modal #close-btn").click();
+    }
+    catch (error) {
+        alert("Update user error: ", error);
+        message.innerText = error.message;
+    }
+
 }
 
 (async function initPage() {

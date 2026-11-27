@@ -244,15 +244,55 @@ client.auth.onAuthStateChange((event, session) => {
     initAuthUI(session);
 })
 
-function initAuthUI(session) {
+async function initAuthUI(session) {
     const isLogin = Boolean(session?.user);
     document.querySelectorAll(".isLogout").forEach(item => item.classList.toggle("hidden", isLogin));
     document.querySelectorAll(".isLogin").forEach(item => item.classList.toggle("hidden", !isLogin));
 
+    const { id, email } = session.user;
+    const profile = await fectchUserProfile(id);
+    document.querySelector("#crud-modal #email").value = email;
+    document.querySelector("#crud-modal #name").value = profile?.name;
+    document.querySelector("#crud-modal #id").value = id;
+
+}
+
+async function fectchUserProfile(id) {
+    const { data, error } = await client
+        .from("users")
+        .select("name")
+        .eq("id", id)
+        .single();
+
+    if (error) {
+        console.error("Fetch user profile error", error);
+        return null;
+
+        return data;
+    }
 }
 
 async function supabaseLogout() {
-    const {error} = await client.auth.signOut();
+    const { error } = await client.auth.signOut();
     if (error) throw error;
-    
+
+}
+
+async function supabaseLogin(email, password) {
+    const { data, error } = await client.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if (error) throw error;
+    return data;
+}
+
+async function updateUserProfile(id, name) {
+    const { error } = await client
+        .from("users")
+        .update({ name })
+        .eq("id", id)
+    if (error) throw error;
+
 }
